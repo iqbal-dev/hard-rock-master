@@ -55,59 +55,14 @@
                 <div id="contain"></div>
             </div>
             <!-- Single Lyrics -->
-            <div class="single-lyrics text-center">
+            <div class="single-lyrics text-center" id="show-section">
                 <button class="btn go-back">&lsaquo;</button>
                 <h2 class="text-success mb-4" id="lyricsTitle"></h2>
+                <img src="" alt="" id="image" class="mb-4">
                 <pre class="lyric text-white" id="lyrics"></pre>
             </div>
             <!-- === Fancy results === -->
-            <div class="search-result col-md-8 mx-auto py-4">
-                <!-- single result -->
-                <div class="single-result row align-items-center my-3 p-3">
-                    <div class="col-md-9">
-                        <h3 class="lyrics-name">Purple Noon</h3>
-                        <p class="author lead">Album by <span>Washed Out</span></p>
-                    </div>
-                    <div class="col-md-3 text-md-right text-center">
-                        <button class="btn btn-success">Get Lyrics</button>
-                    </div>
-                </div>
-                <!-- ./ single result -->
-
-                <!-- single result -->
-                <div class="single-result row align-items-center my-3 p-3">
-                    <div class="col-md-9">
-                        <h3 class="lyrics-name">Purple Noon</h3>
-                        <p class="author lead">Album by <span>Washed Out</span></p>
-                    </div>
-                    <div class="col-md-3 text-md-right text-center">
-                        <button class="btn btn-success">Get Lyrics</button>
-                    </div>
-                </div>
-                <!-- ./ single result -->
-                <!-- single result -->
-                <div class="single-result row align-items-center my-3 p-3">
-                    <div class="col-md-9">
-                        <h3 class="lyrics-name">Purple Noon</h3>
-                        <p class="author lead">Album by <span>Washed Out</span></p>
-                    </div>
-                    <div class="col-md-3 text-md-right text-center">
-                        <button class="btn btn-success">Get Lyrics</button>
-                    </div>
-                </div>
-                <!-- ./ single result -->
-                <!-- single result -->
-                <div class="single-result row align-items-center my-3 p-3">
-                    <div class="col-md-9">
-                        <h3 class="lyrics-name">Purple Noon</h3>
-                        <p class="author lead">Album by <span>Washed Out</span></p>
-                    </div>
-                    <div class="col-md-3 text-md-right text-center">
-                        <button class="btn btn-success">Get Lyrics</button>
-                    </div>
-                </div>
-                <!-- ./ single result -->
-            </div>
+            <div class="search-result col-md-8 mx-auto py-4" id="divContainer"></div>
 
 
 
@@ -122,60 +77,157 @@
     <!-- Custom Script Here -->
 
     <script>
+
+/***************************  Fency section  *************************/
         document.getElementById('searchResult').addEventListener('click',function(e){
-            const songName = document.getElementById('searchInput').value;
+             const songName = document.getElementById('searchInput').value;
             fetch(`https://api.lyrics.ovh/suggest/${songName}`)
             .then(res => res.json())
             .then(data =>{
-                for(let i = 0; i<10; i++){
-                    // create Element part
-                    const songTitle = document.createElement('strong');
-                    const artist = document.createElement('span');
-                    const songDetails = document.createElement('p');
-                    const getLyricsButton = document.createElement('button')
-                    // create Element part
-                    // value assign to the element
-                    getLyricsButton.innerText = "Get Lyrics"
-                    getLyricsButton.classList.add("btn", "btn-success")
-                    songDetails.classList.add("author","lead")
-                    songTitle.innerText = data.data[i].title ;
-                    artist.innerText =  data.data[i].artist.name+" ";
-                    songDetails.appendChild(songTitle);
-                    songDetails.append( " Album By " );
-                    songDetails.appendChild(artist);
-                    songDetails.appendChild(getLyricsButton)
-                    document.getElementById('contain').appendChild(songDetails)
-                    // value assign to the element
+                console.log(data.data[0].album.cover_small)
+                for(let i = 0; i < 10; i++){
+                    //create element part
+                    const lyricsContainer = document.createElement("div")
+                    const lyricsAndArtistSection = document.createElement("div");
+                    const lyricsTitle = document.createElement("h3");
+                    const pTag = document.createElement("p");
+                    const artist = document.createElement("span");
+                    const getLyricsSection = document.createElement("div");
+                    const getLyrics = document.createElement("button");
+                    const imageDiv = document.createElement("div");
+                    const albumImage = document.createElement("img")
+                    const attribute = document.createAttribute('src')
+                    //create element part
 
+                    //style to the css create element
+                    lyricsContainer.classList.add("single-result", "row", "align-items-center", "my-3", "p-3")
+                    lyricsAndArtistSection.classList.add("col-md-6");
+                    lyricsTitle.classList.add("lyrics-name");
+                    pTag.classList.add("author", "lead");
+                    getLyricsSection.classList.add("col-md-3", "text-md-right", "text-center");
+                    getLyrics.classList.add("btn", "btn-success");
+                    imageDiv.classList.add('col-md-3')
+                    //style to the css create element
+                    //assign value to the element
+                    albumImage.setAttribute('src',`${data.data[i].album.cover}`)
+                    lyricsTitle.innerHTML= data.data[i].title;
+                    artist.innerText = data.data[i].artist.name;
+                    lyricsAndArtistSection.appendChild(lyricsTitle);
+                    pTag.append("Album by ");
+                    getLyrics.append("Get Lyrics")
+                    pTag.appendChild(artist);
+                    lyricsAndArtistSection.appendChild(pTag);
+                    getLyricsSection.appendChild(getLyrics);
+                    
+                    imageDiv.appendChild(albumImage);
+                    lyricsContainer.appendChild(imageDiv);
+                    lyricsContainer.appendChild(lyricsAndArtistSection);
+                    lyricsContainer.appendChild(getLyricsSection);
+                    document.getElementById("divContainer").appendChild(lyricsContainer)
+                    //assign value to the element
+
+                    
                 }
-                // lyrics show part
+            //lyrics show part
                 const getLyrics = document.getElementsByTagName('button')
                 for(let j = 0; j<getLyrics.length; j++){
                     
                     getLyrics[j].addEventListener('click',function(){
-                    let titleName = document.querySelectorAll('strong')[j-2].innerText;
-                    const artistName = document.querySelectorAll('span')[j-1].innerText;
+                    const imgSrc = document.querySelectorAll('img')[j].getAttribute("src");
+                    let titleName = document.querySelectorAll('h3')[j-3].innerText;
+                    const artistName = document.querySelectorAll('span')[j-2].innerText;
                     document.getElementById("lyricsTitle").innerText = `${artistName}-${titleName}`
+                    document.getElementById("image").src = imgSrc
                     // getting lyrics data from api
                     fetch(`https://api.lyrics.ovh/v1/${artistName}/${titleName}`)
                     .then(res => res.json())
                     .then(data => {
-                        document.getElementById('lyrics').innerText = data.lyrics
+                        if(typeof data.lyrics == "string"){
+                            document.getElementById('lyrics').innerText = data.lyrics
+                        }
+                        else{
+                            document.getElementById("lyrics").innerText = "Lyrics is not found"
+                        }
+                        
                     })
                     // getting lyrics data from api
-                               
-            document.getElementById('contain').innerHTML = "";
+                    document.getElementById("divContainer").innerHTML = ""
+                    
             })
             // lyrics show part
         }
-            })           
-            document.getElementById('contain').innerHTML = "";
-            document.getElementById('lyrics').innerText = ""
-            document.getElementById('lyricsTitle').innerText= ""
+            })
+            document.getElementById("divContainer").innerHTML= "";
+            document.getElementById("lyrics").innerHTML = "";
+            document.getElementById("lyricsTitle").innerHTML = "";
+            document.getElementById("image").src = "";
             document.getElementById('searchInput').value = ""
         })
+/***************************  Fency Result section *************************/
 
 
+/***************************  Normal result section *************************/
+/****************************************************************************/
+        //         document.getElementById('searchResult').addEventListener('click',function(e){
+        //     const songName = document.getElementById('searchInput').value;
+        //     fetch(`https://api.lyrics.ovh/suggest/${songName}`)
+        //     .then(res => res.json())
+        //     .then(data =>{
+        //         for(let i = 0; i<10; i++){
+        //             // create Element part
+        //             const songTitle = document.createElement('strong');
+        //             const artist = document.createElement('span');
+        //             const songDetails = document.createElement('p');
+        //             const getLyricsButton = document.createElement('button')
+        //             // create Element part
+        //             // value assign to the element
+        //             getLyricsButton.innerText = "Get Lyrics"
+        //             getLyricsButton.classList.add("btn", "btn-success")
+        //             songDetails.classList.add("author","lead")
+        //             songTitle.innerText = data.data[i].title ;
+        //             artist.innerText =  data.data[i].artist.name+" ";
+        //             songDetails.appendChild(songTitle);
+        //             songDetails.append( " Album By " );
+        //             songDetails.appendChild(artist);
+        //             songDetails.appendChild(getLyricsButton)
+        //             document.getElementById('contain').appendChild(songDetails)
+        //             // value assign to the element
+
+        //         }
+        //         // lyrics show part
+        //         const getLyrics = document.getElementsByTagName('button')
+
+        //     })  
+        //     function findLyrics(){
+        //         for(let j = 0; j<getLyrics.length; j++){
+                    
+        //             getLyrics[j].addEventListener('click',function(){
+        //             let titleName = document.querySelectorAll('strong')[j-2].innerText;
+        //             const artistName = document.querySelectorAll('span')[j-1].innerText;
+        //             document.getElementById("lyricsTitle").innerText = `${artistName}-${titleName}`
+        //             // getting lyrics data from api
+        //             fetch(`https://api.lyrics.ovh/v1/${artistName}/${titleName}`)
+        //             .then(res => res.json())
+        //             .then(data => {
+        //                 if(typeof data.lyrics == "string"){
+        //                     document.getElementById('lyrics').innerText = data.lyrics
+        //                 }
+        //                 else{
+        //                     document.getElementById("lyrics").innerText = "Lyrics is not found"
+        //                 }
+        //             })
+        //             // getting lyrics data from api
+                               
+        //     document.getElementById('contain').innerHTML = "";
+        //     })
+        //     // lyrics show part
+        // }
+        //     }         
+        //     document.getElementById('contain').innerHTML = "";
+        //     document.getElementById('lyrics').innerText = ""
+        //     document.getElementById('lyricsTitle').innerText= ""
+        //     document.getElementById('searchInput').value = ""
+        // })
     </script>
 </body>
 
