@@ -46,119 +46,19 @@
             <div class="search-bar col-md-6 mx-auto">
                 <h1 class="text-center">Lyrics Search</h1>
                 <div class="search-box my-5">
-                    <input type="text" class="form-control" placeholder="Enter your artist song name">
-                    <button class="btn btn-success search-btn">Search</button>
+                    <input type="text" class="form-control" placeholder="Enter your artist song name" id="searchInput">
+                    <button class="btn btn-success search-btn" id="searchResult">Search</button>
                 </div>
             </div>
             <!-- === Simple results === -->
             <div class="d-flex justify-content-center">
-                <div class="">
-                    <p class="author lead"><strong>Purple Noon</strong> Album by <span>Washed Out</span> <button class="btn btn-success">Get Lyrics</button></p>
-                    <p class="author lead"><strong>Purple Noon</strong> Album by <span>Washed Out</span> <button class="btn btn-success">Get Lyrics</button></p>
-                    <p class="author lead"><strong>Purple Noon</strong> Album by <span>Washed Out</span> <button class="btn btn-success">Get Lyrics</button></p>
-                    <p class="author lead"><strong>Purple Noon</strong> Album by <span>Washed Out</span> <button class="btn btn-success">Get Lyrics</button></p>
-                    <p class="author lead"><strong>Purple Noon</strong> Album by <span>Washed Out</span> <button class="btn btn-success">Get Lyrics</button></p>
-                </div>
+                <div id="contain"></div>
             </div>
             <!-- Single Lyrics -->
             <div class="single-lyrics text-center">
                 <button class="btn go-back">&lsaquo;</button>
-                <h2 class="text-success mb-4">Pentatonix - Na Na Na</h2>
-                <pre class="lyric text-white">
-    Wont go whistling like the wind blows,
-    Looking out my window,
-    Just to see the shine
-    Maybe you might call it crazy,
-    How Im acting lately,
-
-    Skipping through the sky
-
-
-
-     I see so clearly,
-
-    Why Im always feeling free.
-
-    So I sleep when my dreams,
-
-    Looking like reality
-
-
-
-    (Gonna feel it! Na na na...) x4
-
-
-
-    Gonna feel it!
-
-
-
-    I know where the greener grass grows
-
-    Youll just have to follow
-
-    To the other side
-
-
-
-     Lets go tiptoe on a tight rope,
-
-    Fallings only natural
-
-    Just spread your wings and fly
-
-
-
-    Youll see so clearly,
-
-    Why Im always feeling free.
-
-    So I sleep when our dreams
-
-    Looking like reality
-
-
-
-    (Gonna feel it! Na na na...) x4
-
-
-
-    Bring it down like
-
-    Ohh way oh
-
-    Yeah yeah yeah yeah yeah yeah
-
-    Break it down like
-
-    Ohh way oh
-
-     Yeah, yeah, yeah...
-
-    All around like
-
-    Ohh way oh
-
-    Yeah, yeah, yeah...
-
-    Sing it loud like!
-
-    Ohh way oh
-
-    Ah oo oo ooo
-
-
-
-     Gonna feel it! (Na na na...)
-
-     Make it sound like! (Na na na...)
-
-    All around like! (Na na na...)
-
-    Sing it loud like! (Na na na...)
-
-    Gonna feel like! (Na na na...)
-                </pre>
+                <h2 class="text-success mb-4" id="lyricsTitle"></h2>
+                <pre class="lyric text-white" id="lyrics"></pre>
             </div>
             <!-- === Fancy results === -->
             <div class="search-result col-md-8 mx-auto py-4">
@@ -221,6 +121,62 @@
 
     <!-- Custom Script Here -->
 
+    <script>
+        document.getElementById('searchResult').addEventListener('click',function(e){
+            const songName = document.getElementById('searchInput').value;
+            fetch(`https://api.lyrics.ovh/suggest/${songName}`)
+            .then(res => res.json())
+            .then(data =>{
+                for(let i = 0; i<10; i++){
+                    // create Element part
+                    const songTitle = document.createElement('strong');
+                    const artist = document.createElement('span');
+                    const songDetails = document.createElement('p');
+                    const getLyricsButton = document.createElement('button')
+                    // create Element part
+                    // value assign to the element
+                    getLyricsButton.innerText = "Get Lyrics"
+                    getLyricsButton.classList.add("btn", "btn-success")
+                    songDetails.classList.add("author","lead")
+                    songTitle.innerText = data.data[i].title ;
+                    artist.innerText =  data.data[i].artist.name+" ";
+                    songDetails.appendChild(songTitle);
+                    songDetails.append( " Album By " );
+                    songDetails.appendChild(artist);
+                    songDetails.appendChild(getLyricsButton)
+                    document.getElementById('contain').appendChild(songDetails)
+                    // value assign to the element
+
+                }
+                // lyrics show part
+                const getLyrics = document.getElementsByTagName('button')
+                for(let j = 0; j<getLyrics.length; j++){
+                    
+                    getLyrics[j].addEventListener('click',function(){
+                    let titleName = document.querySelectorAll('strong')[j-2].innerText;
+                    const artistName = document.querySelectorAll('span')[j-1].innerText;
+                    document.getElementById("lyricsTitle").innerText = `${artistName}-${titleName}`
+                    // getting lyrics data from api
+                    fetch(`https://api.lyrics.ovh/v1/${artistName}/${titleName}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        document.getElementById('lyrics').innerText = data.lyrics
+                    })
+                    // getting lyrics data from api
+                               
+            document.getElementById('contain').innerHTML = "";
+            })
+            // lyrics show part
+        }
+            })           
+            document.getElementById('contain').innerHTML = "";
+            document.getElementById('lyrics').innerText = ""
+            document.getElementById('lyricsTitle').innerText= ""
+            document.getElementById('searchInput').value = ""
+        })
+
+
+    </script>
 </body>
 
 </html>
