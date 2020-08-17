@@ -164,69 +164,6 @@
         })
 /***************************  Fency Result section *************************/
 
-
-/***************************  Normal result section *************************/
-/****************************************************************************/
-        //         document.getElementById('searchResult').addEventListener('click',function(e){
-        //     const songName = document.getElementById('searchInput').value;
-        //     fetch(`https://api.lyrics.ovh/suggest/${songName}`)
-        //     .then(res => res.json())
-        //     .then(data =>{
-        //         for(let i = 0; i<10; i++){
-        //             // create Element part
-        //             const songTitle = document.createElement('strong');
-        //             const artist = document.createElement('span');
-        //             const songDetails = document.createElement('p');
-        //             const getLyricsButton = document.createElement('button')
-        //             // create Element part
-        //             // value assign to the element
-        //             getLyricsButton.innerText = "Get Lyrics"
-        //             getLyricsButton.classList.add("btn", "btn-success")
-        //             songDetails.classList.add("author","lead")
-        //             songTitle.innerText = data.data[i].title ;
-        //             artist.innerText =  data.data[i].artist.name+" ";
-        //             songDetails.appendChild(songTitle);
-        //             songDetails.append( " Album By " );
-        //             songDetails.appendChild(artist);
-        //             songDetails.appendChild(getLyricsButton)
-        //             document.getElementById('contain').appendChild(songDetails)
-        //             // value assign to the element
-
-        //         }
-        //         // lyrics show part
-        //         const getLyrics = document.getElementsByTagName('button')
-
-        //     })  
-        //     function findLyrics(){
-        //         for(let j = 0; j<getLyrics.length; j++){
-                    
-        //             getLyrics[j].addEventListener('click',function(){
-        //             let titleName = document.querySelectorAll('strong')[j-2].innerText;
-        //             const artistName = document.querySelectorAll('span')[j-1].innerText;
-        //             document.getElementById("lyricsTitle").innerText = `${artistName}-${titleName}`
-        //             // getting lyrics data from api
-        //             fetch(`https://api.lyrics.ovh/v1/${artistName}/${titleName}`)
-        //             .then(res => res.json())
-        //             .then(data => {
-        //                 if(typeof data.lyrics == "string"){
-        //                     document.getElementById('lyrics').innerText = data.lyrics
-        //                 }
-        //                 else{
-        //                     document.getElementById("lyrics").innerText = "Lyrics is not found"
-        //                 }
-        //             })
-        //             // getting lyrics data from api
-                               
-        //     document.getElementById('contain').innerHTML = "";
-        //     })
-        //     // lyrics show part
-        // }
-        //     }         
-        //     document.getElementById('contain').innerHTML = "";
-        //     document.getElementById('lyrics').innerText = ""
-        //     document.getElementById('lyricsTitle').innerText= ""
-        //     document.getElementById('searchInput').value = ""
-        // })
     </script>
 </body>
 
