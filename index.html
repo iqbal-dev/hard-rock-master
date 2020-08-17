@@ -84,7 +84,6 @@
             fetch(`https://api.lyrics.ovh/suggest/${songName}`)
             .then(res => res.json())
             .then(data =>{
-                console.log(data.data[0].album.cover_small)
                 for(let i = 0; i < 10; i++){
                     //create element part
                     const lyricsContainer = document.createElement("div")
